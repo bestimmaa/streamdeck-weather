@@ -1,0 +1,1 @@
+& "./bin/DistributionTool.exe" -b -i ./Sources/com.elgato.numberdisplay.sdPlugin -o Release

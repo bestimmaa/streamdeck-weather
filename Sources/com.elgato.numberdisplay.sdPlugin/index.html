@@ -38,7 +38,7 @@
 
 				this.SetSettings(context, updatedSettings);
 
-				this.SetTitle(context, keyPressCounter);
+				//this.SetTitle(context, keyPressCounter);
 			},
 
 			onWillAppear: function (context, settings, coordinates) {
@@ -48,7 +48,8 @@
 					keyPressCounter = settings["keyPressCounter"];
 				}
 				settingsCache[context] = { 'keyPressCounter': keyPressCounter };
-				this.SetTitle(context, keyPressCounter);
+				//this.SetTitle(context, keyPressCounter);
+				this.Weather(context)
 			},
 
 			SetTitle: function (context, keyPressCounter) {
@@ -56,7 +57,7 @@
 					"event": "setTitle",
 					"context": context,
 					"payload": {
-						"title": "" + keyPressCounter,
+						"title": "" + keyPressCounter ,
 						"target": DestinationEnum.HARDWARE_AND_SOFTWARE
 					}
 				};
@@ -76,6 +77,35 @@
 
 			AddToSettings: function (context, newSettings) {
 				settingsCache[context]
+			}
+			,
+			Weather: function (context) {
+				const Url = "http://api.weatherstack.com/current?access_key=ced71f57157222d5b45c996cb95666b7&query=Berlin"
+				var that = this;
+
+				fetch(Url).then(
+					function (response) {
+						if (response.status !== 200) {
+							console.log('Looks like there was a problem. Status Code: ' +
+								response.status);
+							return;
+						}
+
+						// Examine the text in the response
+						response.json().then(function (data) {
+							let temp = data.current.temperature;
+							let description = data.current.weather_descriptions[0];
+							updatedSettings = {};
+							updatedSettings["temperature"] = temp;
+							updatedSettings["weather_description"] = description;
+							settingsCache[context] = updatedSettings;
+
+							that.SetSettings(context, updatedSettings);
+							that.SetTitle(context, temp + " °C\n"+description)
+
+						});
+					}
+				)
 			}
 		};
 
