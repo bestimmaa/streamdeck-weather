@@ -1,1 +1,1 @@
-& "./bin/DistributionTool.exe" -b -i ./Sources/com.elgato.numberdisplay.sdPlugin -o Release
+& "./bin/DistributionTool.exe" -b -i ./Sources/de.bestimmaa.weather.sdPlugin -o Release
